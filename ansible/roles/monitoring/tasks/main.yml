@@ -1,0 +1,36 @@
+- name: Create prometheus config dir
+  file:
+    path: /opt/microservices/prometheus
+    state: directory
+    mode: '0755'
+
+- name: Upload a minimal prometheus.yml
+  copy:
+    dest: /opt/microservices/prometheus/prometheus.yml
+    content: |
+      global:
+        scrape_interval: 15s
+      scrape_configs:
+        - job_name: 'cadvisor'
+          static_configs:
+            - targets: ['localhost:8080']
+        - job_name: 'prometheus'
+          static_configs:
+            - targets: ['localhost:9090']
+
+- name: Ensure node exporter installed (systemd)
+  apt:
+    name: prometheus-node-exporter
+    state: present
+    update_cache: yes
+  ignore_errors: yes
+
+- name: If node exporter not in apt, use docker node_exporter
+  docker_container:
+    name: node_exporter
+    image: prom/node-exporter:latest
+    state: started
+    restart_policy: unless-stopped
+    pid_mode: host
+    network_mode: host
+  when: ansible_facts.packages.prometheus-node-exporter is not defined

@@ -1,0 +1,43 @@
+- name: Install Docker prerequisites
+  apt:
+    name: "{{ docker_packages }}"
+    state: present
+    update_cache: yes
+
+- name: Add Docker GPG key
+  ansible.builtin.apt_key:
+    url: https://download.docker.com/linux/ubuntu/gpg
+    state: present
+
+- name: Add Docker repo
+  apt_repository:
+    repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ ansible_lsb.codename }} stable
+    state: present
+
+- name: Install docker-ce
+  apt:
+    name: ["docker-ce","docker-ce-cli","containerd.io"]
+    state: present
+    update_cache: yes
+
+- name: Ensure docker service is running
+  service:
+    name: docker
+    state: started
+    enabled: yes
+
+- name: Install docker-compose (binary)
+  get_url:
+    url: "https://github.com/docker/compose/releases/download/{{ docker_compose_version }}/docker-compose-$(uname -s)-$(uname -m)"
+    dest: /usr/local/bin/docker-compose
+    mode: '0755'
+  args:
+    warn: false
+  register: dc
+  changed_when: dc is changed
+
+- name: Add ansible user to docker group
+  user:
+    name: "{{ ansible_user }}"
+    groups: docker
+    append: yes

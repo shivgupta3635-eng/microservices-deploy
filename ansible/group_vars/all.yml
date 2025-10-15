@@ -1,0 +1,23 @@
+docker_packages:
+  - ca-certificates
+  - curl
+  - gnupg
+  - lsb-release
+
+docker_compose_version: "1.29.2"
+
+microservices:
+  - name: auth-service
+    image: nginx:stable
+    ports:
+      - "8001:80"
+  - name: order-service
+    image: nginx:stable
+    ports:
+      - "8002:80"
+  - name: tracking-service
+    image: nginx:stable
+    ports:
+      - "8003:80"
+
+prometheus_node_targets: []
