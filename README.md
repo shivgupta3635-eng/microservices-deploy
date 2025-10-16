@@ -1,3 +1,9 @@
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+# microservices-deploy
+=======
+>>>>>>> 5a9f615 (variable)
 # microservices-deploy
 
 This project provisions Ubuntu EC2 instances using Terraform and configures Dockerized microservices + monitoring using Ansible.
@@ -32,3 +38,7 @@ This project provisions Ubuntu EC2 instances using Terraform and configures Dock
 ## Notes
 - This is a starter blueprint. Replace the example nginx images with your actual microservice images.
 - Secure your SSH access by setting `my_ip_cidr` in terraform/variables.tf.
+<<<<<<< HEAD
+=======
+>>>>>>> 6212bde (Initial commit - Microservices Deployment using Terraform & Ansible)
+>>>>>>> 5a9f615 (variable)
