@@ -72,6 +72,7 @@ resource "aws_instance" "app" {
   subnet_id     = aws_subnet.default.id
   key_name      = aws_key_pair.deployer.key_name
   vpc_security_group_ids = [aws_security_group.ssh_http.id]
+  associate_public_ip_address = true   # <-- add this line
 
   tags = {
     Name = "micro-app-${count.index + 1}"
